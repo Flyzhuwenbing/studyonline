@@ -1,10 +1,13 @@
 from datetime import datetime
 
 from django.db import models
+from organization.models import CourseOrg
 
 
 # 课程基本信息
 class Course(models.Model):
+    # 外键指向CourseOrg表中的__str__定义的字段
+    course_org = models.ForeignKey(CourseOrg,verbose_name='课程机构',null=True)
     name = models.CharField(max_length=50,verbose_name='课程名')
     desc = models.CharField(max_length=300,verbose_name='课程描述')
     detail = models.TextField(verbose_name='课程详情')

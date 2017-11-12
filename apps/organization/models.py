@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.db import models
 
+
 # Create your models here.
 class CityDict(models.Model):
     name = models.CharField(max_length=20, verbose_name='城市')
@@ -46,8 +47,12 @@ class Teacher(models.Model):
     points = models.CharField(max_length=50, verbose_name='教学特点')
     click_nums = models.IntegerField(default=0, verbose_name='点击数')
     fav_nums = models.IntegerField(default=0, verbose_name='收藏数')
+    image = models.ImageField(default='',upload_to='teachers/%Y/%m', verbose_name='头像', max_length=100)
     add_time = models.DateTimeField(default=datetime.now)
 
     class Meta:
         verbose_name = '教师'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
