@@ -16,6 +16,10 @@ class UseAsk(models.Model):
         verbose_name = '用户咨询'
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.name
+
+
 class CourseComments(models.Model):
     user = models.ForeignKey(UserProfile,verbose_name='用户')
     course = models.ForeignKey(Course,verbose_name='课程')
@@ -25,6 +29,10 @@ class CourseComments(models.Model):
     class Meta:
         verbose_name = '课程评论'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.user.nick_name
+
 
 class UserFavorite(models.Model):
     user = models.ForeignKey(UserProfile, verbose_name='用户')
@@ -36,6 +44,8 @@ class UserFavorite(models.Model):
         verbose_name = '用户收藏'
         verbose_name_plural = verbose_name
 
+
+
 class UserMessage(models.Model):
     user = models.IntegerField(default=0,verbose_name='接收用户')
     message = models.CharField(max_length=500,verbose_name='消息内容')
@@ -45,6 +55,9 @@ class UserMessage(models.Model):
     class Meta:
         verbose_name = '用户消息'
         verbose_name_plural = verbose_name
+
+
+
 
 class UserCourse(models.Model):
     user = models.ForeignKey(UserProfile, verbose_name='用户')
