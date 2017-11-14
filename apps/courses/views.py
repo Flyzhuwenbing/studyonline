@@ -4,7 +4,8 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 
 from .models import Course,CourseResource
-from operation.models import UserFavorite,CourseComments
+from operation.models import UserFavorite,CourseComments,UserCourse
+from utils.mixin_utils import LoginRequiredMixin
 # Create your views here.
 
 
@@ -68,20 +69,38 @@ class CourseDetailView(View):
             'has_fav_org':has_fav_org
         })
 
-class CourseInfoView(View):
+class CourseInfoView(LoginRequiredMixin,View):
     """
     课程章节信息
     """
     def get(self, request, course_id):
         course = Course.objects.get(id=int(course_id))
+
+        # 查询用户是否已经关联了该课程
+        user_course_ids = UserCourse.objects.filter(user=request.user, course=course)
+        if not user_course_ids:
+            user_course_id = UserCourse(user=request.user, course=course)
+            user_course_id.save()
+
+        # 通过课程表中的name取出用户课程表中的对应的user_course_ids
+        user_course_ids = UserCourse.objects.filter(course=course)
+        # 学过该课程有哪些用户
+        user_ids =[user_course_id.user.id for user_course_id in user_course_ids ]
+
+        # 取出对应用户所学过的课程
+        all_user_course_ids = UserCourse.objects.filter(user_id__in=user_ids)# 通过all_user_course_ids取出所有课程id
+        all_course_ids = [all_user_course_id.course.id for all_user_course_id in all_user_course_ids] # 获取该用户学过的其他所有课程
+        relate_courses = Course.objects.filter(id__in=all_course_ids).order_by('-click_nums')[:5]
+
         all_resources = CourseResource.objects.filter(course=course)
         return render(request, 'course-video.html', {
             'course':course,
-            'all_resources':all_resources
+            'all_resources':all_resources,
+            'relate_courses':relate_courses
         })
 
 
-class CommentsView(View):
+class CommentsView(LoginRequiredMixin,View):
     """
     课程评论
     """

@@ -3,10 +3,11 @@ from django.views.generic import View
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 
-from .models import CourseOrg,CityDict
+from .models import CourseOrg,CityDict,Teacher
 from .forms import UseAskForm
 from courses.models import Course
 from operation.models import UserFavorite
+from courses.models import Course
 
 # Create your views here.
 class OrgView(View):
@@ -149,9 +150,71 @@ class OrgTeacherView(View):
         })
 
 
+
+
+
+class TeacherListView(View):
+    """
+    课程讲师列表页
+    """
+    def get(self,request):
+        all_teachers = Teacher.objects.all()
+
+        # 排序
+        sort = request.GET.get('sort', '')
+        if sort == 'hot':
+            all_teachers = all_teachers.order_by('-click_nums')
+        sorted_teacher = Teacher.objects.all().order_by('-click_nums')[:3]
+
+        # 对讲师页面进行分页
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+        p = Paginator(all_teachers, 1, request=request)
+        teachers = p.page(page)
+
+        return render(request, 'teachers-list.html', {
+            'all_teachers':teachers,
+            'sorted_teacher':sorted_teacher,
+            'sort':sort
+        })
+
+class TeacherDetailView(View):
+    """
+    讲师详情页
+    """
+    def get(self,request,teacher_id):
+        teacher = Teacher.objects.get(id=teacher_id)
+
+        # 对应讲师的所有课程
+        all_courses = Course.objects.filter(teacher=teacher)
+
+        # 避免刷新页面将收藏标志归原
+        has_teacher_fav = False
+        if request.user.is_authenticated():
+            if UserFavorite.objects.filter(user=request.user, fav_id=teacher_id, fav_type=3):
+                has_teacher_fav = True
+
+            has_org_fav = False
+            if request.user.is_authenticated():
+                if UserFavorite.objects.filter(user=request.user, fav_id=teacher.org.id, fav_type=2):
+                    has_org_fav = True
+        # 讲师排名
+        sorted_teacher = Teacher.objects.all().order_by('-click_nums')[:3]
+        return render(request, 'teacher-detail.html', {
+            'teacher':teacher,
+            'all_courses':all_courses,
+            'sorted_teacher': sorted_teacher,
+            'has_teacher_fav':has_teacher_fav,
+            'has_org_fav':has_org_fav
+
+        })
+
+
 class AddFavView(View):
     """
-    用户收藏,用户取消收藏
+    用户收藏,用户取消收藏功能模板
     """
     def post(self,request):
         fav_id = request.POST.get('fav_id', 0)
@@ -175,8 +238,6 @@ class AddFavView(View):
                     return HttpResponse('{"status":"success","msg":"已收藏"}', content_type='application/json')
                 else:
                     return HttpResponse('{"status":"fail","msg":"收藏出错"}', content_type='application/json')
-
-
 
 
 
