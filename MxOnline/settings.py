@@ -113,7 +113,7 @@ DATABASES = {
         'NAME': 'mxonline',
         'USER': 'root',
         'PASSWORD': 'mysql',
-        'HOST':'120.8.201.155',
+        'HOST':'120.78.201.155',
     }
 }
 
