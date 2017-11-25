@@ -14,8 +14,8 @@ import os
 import sys
 
 
-import pymysql
-pymysql.install_as_MySQLdb()
+# import pymysql
+# pymysql.install_as_MySQLdb()
 
 # 自定义路径配置
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
