@@ -33,9 +33,9 @@ sys.path.insert(0,os.path.join(BASE_DIR,'extra_apps'))
 SECRET_KEY = 'x4o_du_dz=nitg2-j(-2%si^++6t*nc&0i*3h!^hx+1@$mcx^0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','localhost','120.78.201.155']
 
 
 # Application definition
@@ -103,7 +103,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mxonline',
         'USER': 'root',
-        'PASSWORD': 'wen963852',
+        'PASSWORD': 'root',
         'HOST':'127.0.0.1',
     }
 }
@@ -149,6 +149,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 EMAIL_HOST = 'smtp.sina.cn'
 EMAIL_PORT = 25
@@ -158,7 +159,7 @@ EMAIL_USE_TLS = False
 EMAIL_FROM = '13534116718m@sina.cn'  # 指明发件人
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 

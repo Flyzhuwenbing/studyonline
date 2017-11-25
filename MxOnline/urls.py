@@ -19,15 +19,16 @@ from django.views.generic import TemplateView
 import xadmin
 from django.views.static import serve
 
-from users.views import LoginView,RegisterView,ActiveUserView,ForgetPwdView,ResetView,ModifyPwdView
+from users.views import LoginView, LogoutView, RegisterView,ActiveUserView,ForgetPwdView,ResetView,ModifyPwdView, IndexView
 from organization.views import OrgView
-from MxOnline.settings import MEDIA_ROOT
+from MxOnline.settings import MEDIA_ROOT #, STATIC_ROOT
 
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
-    url(r'^$', TemplateView.as_view(template_name="index.html"), name="index"),
+    url(r'^$', IndexView.as_view(), name="index"),
     url(r'^login/$', LoginView.as_view(), name="login"),
+    url(r'^logout/$', LogoutView.as_view(), name="logout"),
     url(r'^register/$', RegisterView.as_view(), name="register"),
     url(r'^captcha/', include('captcha.urls')),
     url(r'^active/(?P<active_code>.*)/$', ActiveUserView.as_view(),name = 'user_active'),
@@ -46,5 +47,11 @@ urlpatterns = [
 
     # 配置上传文件的访问处理函数
     url(r'^media/(?P<path>.*)$',serve,{'document_root':MEDIA_ROOT}),
+
+    # 当settings中debug=False的情况下，配置静态文件的访问处理函数
+    # url(r'^static/(?P<path>.*)$',serve,{'document_root':STATIC_ROOT}),
 ]
 
+# 全局404页面配置
+handler404 = 'users.views.page_not_found'
+handler500 = 'users.views.page_error'
