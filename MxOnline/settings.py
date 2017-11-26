@@ -35,7 +35,7 @@ SECRET_KEY = 'x4o_du_dz=nitg2-j(-2%si^++6t*nc&0i*3h!^hx+1@$mcx^0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','120.78.201.155']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','65.49.219.161','.zhufly.xin']
 
 
 # Application definition
