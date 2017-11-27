@@ -98,12 +98,14 @@ class OrgHomeView(View):
                 has_fav = True
         all_courses = course_org.course_set.all()[:3]  # 通过父表.属性查course表信息（属性默认为子表小写加上_set)
         all_teachers = course_org.teacher_set.all()[:1]
+
         return render(request, 'org-detail-homepage.html', {
             'all_courses': all_courses,
             'all_teachers': all_teachers,
             'course_org': course_org,
             'current_page': current_page,
-            'has_fav': has_fav
+            'has_fav': has_fav,
+
         })
 
 
@@ -196,11 +198,12 @@ class TeacherListView(View):
             page = 1
         p = Paginator(all_teachers, 1, request=request)
         teachers = p.page(page)
-
+        teacher_nums = all_teachers.count()
         return render(request, 'teachers-list.html', {
             'all_teachers': teachers,
             'sorted_teacher': sorted_teacher,
-            'sort': sort
+            'sort': sort,
+            'teacher_nums': teacher_nums
         })
 
 

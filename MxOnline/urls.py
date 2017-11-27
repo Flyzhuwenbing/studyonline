@@ -21,7 +21,7 @@ from django.views.static import serve
 
 from users.views import LoginView, LogoutView, RegisterView,ActiveUserView,ForgetPwdView,ResetView,ModifyPwdView, IndexView
 from organization.views import OrgView
-from MxOnline.settings import MEDIA_ROOT ,STATIC_ROOT
+from MxOnline.settings import MEDIA_ROOT# ,STATIC_ROOT
 
 
 urlpatterns = [
@@ -49,7 +49,7 @@ urlpatterns = [
     url(r'^media/(?P<path>.*)$',serve,{'document_root':MEDIA_ROOT}),
 
     # 当settings中debug=False的情况下，配置静态文件的访问处理函数
-    url(r'^static/(?P<path>.*)$',serve,{'document_root':STATIC_ROOT}),
+    # url(r'^static/(?P<path>.*)$',serve,{'document_root':STATIC_ROOT}),
 ]
 
 # 全局404页面配置
