@@ -1,4 +1,4 @@
-## 基于django框架对在线学习网的开发 （http://www.zhufly.xin/）
+## 基于django框架对在线学习网的开发 （http://www.zhufly.xin）
 
 ### 项目简述
 
